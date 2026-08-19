@@ -1,0 +1,688 @@
+/* Plotweaver — стили окон опросника, результата и блокнота.
+ *
+ * Цвета берём из переменных темы самой таверны (--SmartTheme...),
+ * чтобы расширение выглядело "родным" в любой теме оформления.
+ */
+
+/* --- Панель настроек расширений: три кнопки-модуля --- */
+
+.plotweaver-settings .inline-drawer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.plotweaver-settings .pw-panel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.plotweaver-settings .pw-panel-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.pw-dialog {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 4px 2px;
+}
+
+/* У блокнота своя высота: заполняет реально доступное место в попапе
+ * (а не догадку в vh, из-за которой раньше оставался мёртвый зазор до
+ * кнопки "Закрыть"), с запасным минимумом на случай, если у родителя
+ * почему-то нет собственной заданной высоты. */
+.pw-notebook-dialog {
+    height: 100%;
+    min-height: 65vh;
+}
+
+.pw-title {
+    margin: 0 0 2px 0;
+}
+
+.pw-hint {
+    opacity: 0.65;
+    font-size: 0.85em;
+    margin: 6px 0 4px 0;
+}
+
+/* --- Секции опросника --- */
+
+.pw-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pw-section {
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 8px;
+    background-color: var(--SmartThemeBotMesBlurTintColor);
+    overflow: hidden;
+}
+
+.pw-section .inline-drawer-header {
+    padding: 8px 12px;
+    margin: 0;
+}
+
+.pw-section .inline-drawer-content {
+    padding: 4px 12px 12px 12px;
+}
+
+.pw-section-hint {
+    opacity: 0.65;
+    font-size: 0.85em;
+    margin: 6px 0 12px 0;
+}
+
+/* Каждый вопрос — собственная выделенная карточка, а не просто отступ
+ * от соседа. Так секция читается как набор явных полей, а не сплошная
+ * простыня. */
+.pw-question {
+    margin: 0 0 10px 0;
+    padding: 10px 12px;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 8px;
+}
+
+.pw-question:last-child {
+    margin-bottom: 4px;
+}
+
+.pw-question-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 2px;
+}
+
+.pw-question-label {
+    font-weight: bold;
+    opacity: 0.9;
+}
+
+.pw-question-limit {
+    font-weight: normal;
+    opacity: 0.55;
+    font-size: 0.82em;
+    margin-left: 4px;
+}
+
+.pw-question-clear {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.8em;
+    opacity: 0.55;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    flex-shrink: 0;
+}
+
+.pw-question-clear:hover {
+    opacity: 1;
+}
+
+.pw-question-hint {
+    opacity: 0.6;
+    font-size: 0.82em;
+    margin-top: 6px;
+    margin-bottom: 8px;
+}
+
+/* --- Чипы --- */
+
+.pw-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.pw-chip {
+    padding: 6px 14px;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.88em;
+    line-height: 1.2;
+    user-select: none;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.pw-chip:hover {
+    border-color: var(--SmartThemeQuoteColor);
+    transform: translateY(-1px);
+}
+
+.pw-chip--active {
+    background-color: color-mix(in srgb, var(--SmartThemeQuoteColor) 40%, transparent);
+    color: var(--SmartThemeBodyColor);
+    border-color: var(--SmartThemeQuoteColor);
+    font-weight: 600;
+}
+
+.pw-chip--custom {
+    border-style: dashed;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pw-chip--add {
+    border-style: dashed;
+    opacity: 0.65;
+}
+
+.pw-chip--add:hover {
+    opacity: 1;
+}
+
+.pw-chip-remove {
+    opacity: 0.6;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.pw-chip-remove:hover {
+    opacity: 1;
+}
+
+.pw-add-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: -2px;
+    margin-bottom: 6px;
+}
+
+.pw-add-row .pw-custom-add-input {
+    flex-grow: 1;
+}
+
+.pw-add-row .pw-custom-add-btn {
+    flex-shrink: 0;
+    padding: 4px 12px;
+}
+
+.pw-custom-input {
+    width: 100%;
+    margin-top: 2px;
+}
+
+/* --- Сегментированные переключатели (Формат, Язык генерации) ---
+ * Сплошная полоса на всю ширину, сегменты разделены тонкой линией,
+ * скругление только на внешних углах — как у образца, а не отдельные
+ * кнопки-таблетки с зазорами. */
+
+.pw-segmented {
+    display: flex;
+    width: 100%;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.pw-seg {
+    flex: 1 1 0;
+    padding: 8px 10px;
+    border: 0;
+    border-right: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.14s ease, color 0.14s ease;
+}
+
+.pw-seg:last-child {
+    border-right: 0;
+}
+
+.pw-seg:hover {
+    background-color: var(--SmartThemeBotMesBlurTintColor);
+}
+
+.pw-seg[aria-pressed="true"] {
+    background-color: color-mix(in srgb, var(--SmartThemeQuoteColor) 40%, transparent);
+    color: var(--SmartThemeBodyColor);
+    font-weight: 600;
+}
+
+/* --- Модель и контекст для чтения --- */
+
+.pw-generation-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 8px;
+}
+
+.pw-toggle-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 6px;
+}
+
+.pw-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.pw-field--off {
+    opacity: 0.45;
+}
+
+.pw-history-count-field {
+    margin-top: 8px;
+    max-width: 140px;
+}
+
+.pw-lore-field {
+    margin-top: 8px;
+}
+
+.pw-context-columns {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.pw-context-columns .pw-lore-field {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-top: 0;
+}
+
+.pw-context-columns .pw-history-count-field {
+    flex: 0 0 140px;
+    margin-top: 0;
+}
+
+.pw-lore-search {
+    width: 100%;
+    margin-bottom: 6px;
+}
+
+.pw-lore-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 160px;
+    overflow-y: auto;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 6px;
+    padding: 4px;
+}
+
+.pw-lore-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.pw-lore-item:hover {
+    background-color: var(--SmartThemeBotMesBlurTintColor);
+}
+
+/* --- Общий футер с кнопками действия --- */
+
+.pw-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding-top: 10px;
+    border-top: 1px solid var(--SmartThemeBorderColor);
+}
+
+.pw-footer-right {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.pw-generate-btn,
+.pw-save-btn,
+.pw-preview-btn,
+.pw-btn-lg,
+.pw-cancel-btn,
+.pw-new-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pw-generate-btn,
+.pw-save-btn,
+.pw-preview-btn,
+.pw-btn-lg {
+    font-size: 1em;
+    padding: 8px 18px;
+    white-space: nowrap;
+}
+
+.pw-cancel-btn {
+    padding: 8px 14px;
+    opacity: 0.85;
+}
+
+.pw-review-text {
+    width: 100%;
+    min-height: 320px;
+    line-height: 1.5;
+}
+
+.pw-review-title {
+    width: 100%;
+}
+
+.pw-prompt-preview-wrap {
+    border-top: 1px solid var(--SmartThemeBorderColor);
+    padding-top: 10px;
+}
+
+.pw-prompt-preview {
+    width: 100%;
+    min-height: 220px;
+    font-family: monospace;
+    font-size: 0.85em;
+    line-height: 1.4;
+    opacity: 0.9;
+}
+
+/* --- Блокнот (Sketchbook) ---
+ * Вся раскладка — фиксированной высоты, прокручивается только сам текст
+ * страницы (и список страниц, если их много), а название/теги/тулбар/
+ * кнопки снизу остаются на месте — не нужно скроллить через весь текст,
+ * чтобы добраться до "Удалить" или до соседней страницы. */
+
+.pw-notebook-layout {
+    display: flex;
+    gap: 16px;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.pw-notebook-mode-switch {
+    flex-shrink: 0;
+    margin-bottom: 4px;
+}
+
+.pw-page-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 190px;
+    flex-shrink: 0;
+    min-height: 0;
+}
+
+.pw-page-tabs-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-right: 2px;
+}
+
+.pw-page-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 6px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.pw-page-tab:hover {
+    border-color: var(--SmartThemeQuoteColor);
+}
+
+.pw-page-tab--active {
+    background-color: color-mix(in srgb, var(--SmartThemeQuoteColor) 40%, transparent);
+    color: var(--SmartThemeBodyColor);
+    border-color: var(--SmartThemeQuoteColor);
+    font-weight: 600;
+}
+
+.pw-new-page-btn {
+    flex-shrink: 0;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.pw-page-viewer {
+    flex-grow: 1;
+    min-width: 0;
+    min-height: 0;
+    border-left: 1px solid var(--SmartThemeBorderColor);
+    padding-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pw-page-viewer-top {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pw-page-viewer-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+}
+
+.pw-page-title {
+    width: 100%;
+    font-weight: bold;
+}
+
+.pw-notebook-text {
+    width: 100%;
+    height: 100%;
+    line-height: 1.5;
+}
+
+
+/* --- Тулбар декораций текста --- */
+
+.pw-md-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pw-md-btn {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    transition: background-color 0.14s ease;
+}
+
+.pw-md-btn:hover {
+    background-color: var(--SmartThemeBotMesBlurTintColor);
+}
+
+.pw-md-hl-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 6px;
+    padding-left: 10px;
+    border-left: 1px solid var(--SmartThemeBorderColor);
+}
+
+.pw-md-hl {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid var(--SmartThemeBorderColor);
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.12s ease;
+}
+
+.pw-md-hl:hover {
+    transform: scale(1.15);
+}
+
+/* Приглушённые полупрозрачные оттенки — используются и как цвет мазков
+ * подсветки в тексте (mark), и (с более высокой специфичностью через
+ * .pw-md-hl.pw-hl-*) как заливка самих кнопок-кружочков в тулбаре. */
+.pw-hl-yellow { background-color: rgba(255, 214, 0, 0.28); }
+.pw-hl-pink   { background-color: rgba(255, 105, 180, 0.25); }
+.pw-hl-green  { background-color: rgba(80, 200, 120, 0.25); }
+.pw-hl-blue   { background-color: rgba(90, 160, 255, 0.25); }
+
+.pw-md-hl.pw-hl-yellow { background-color: rgba(255, 214, 0, 0.65); }
+.pw-md-hl.pw-hl-pink   { background-color: rgba(255, 105, 180, 0.6); }
+.pw-md-hl.pw-hl-green  { background-color: rgba(80, 200, 120, 0.6); }
+.pw-md-hl.pw-hl-blue   { background-color: rgba(90, 160, 255, 0.6); }
+
+/* --- Просмотр (рендер маркдауна) --- */
+
+.pw-notebook-preview {
+    width: 100%;
+    height: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 6px;
+    line-height: 1.6;
+    overflow-y: auto;
+}
+
+.pw-notebook-preview h1,
+.pw-notebook-preview h2,
+.pw-notebook-preview h3 {
+    margin: 14px 0 6px 0;
+}
+
+.pw-notebook-preview h1:first-child,
+.pw-notebook-preview h2:first-child,
+.pw-notebook-preview h3:first-child {
+    margin-top: 0;
+}
+
+.pw-notebook-preview p {
+    margin: 0 0 10px 0;
+}
+
+.pw-notebook-preview ul {
+    margin: 0 0 10px 0;
+    padding-left: 22px;
+}
+
+.pw-notebook-preview mark {
+    color: inherit;
+    padding: 0 2px;
+    border-radius: 3px;
+}
+
+/* --- Список страниц: избранное, разделитель, фильтр по тегам --- */
+
+.pw-page-list-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pw-filter-btn {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.pw-filter-btn:hover {
+    opacity: 1;
+}
+
+.pw-filter-btn--active {
+    opacity: 1;
+    border-color: var(--SmartThemeQuoteColor);
+    color: var(--SmartThemeQuoteColor);
+}
+
+.pw-filter-panel {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 6px;
+}
+
+.pw-page-divider {
+    height: 1px;
+    margin: 4px 2px;
+    background-color: var(--SmartThemeBorderColor);
+}
+
+.pw-page-tab-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pw-page-fav {
+    flex-shrink: 0;
+    opacity: 0.25;
+    cursor: pointer;
+    transition: opacity 0.14s ease, color 0.14s ease;
+}
+
+.pw-page-fav:hover {
+    opacity: 0.6;
+}
+
+.pw-page-fav--on {
+    opacity: 1;
+    color: gold;
+}
