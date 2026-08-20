@@ -86,6 +86,7 @@ function emptyAlterDraft() {
         invention: 'balanced',
         profileId: '',
         loreNames: [],
+        avoidNames: true,
     };
 }
 

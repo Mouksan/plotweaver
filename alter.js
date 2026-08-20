@@ -22,6 +22,17 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;');
 }
 
+/** Все уникальные имена сохранённых Persona (для "избегать уже занятых имён"). */
+function getAllPersonaNames() {
+    try {
+        const personas = ctx().powerUserSettings?.personas || {};
+        return [...new Set(Object.values(personas))].filter(Boolean);
+    } catch (error) {
+        console.warn('[Plotweaver] не удалось получить список персон', error);
+        return [];
+    }
+}
+
 const GENDER_OPTIONS = [
     { id: 'male', label: 'Male' },
     { id: 'female', label: 'Female' },
@@ -63,9 +74,9 @@ const INVENTION_TEXT = {
 
 /**
  * Собирает промт для Alter.
- * params: { contextText, gender, species, pheromoneLabels, notes, connection, invention }
+ * params: { contextText, gender, species, pheromoneLabels, notes, connection, invention, avoidNames }
  */
-function buildAlterPrompt({ contextText, gender, species, pheromoneLabels, notes, connection, invention }) {
+function buildAlterPrompt({ contextText, gender, species, pheromoneLabels, notes, connection, invention, avoidNames }) {
     const parts = [];
 
     parts.push(
@@ -90,6 +101,14 @@ function buildAlterPrompt({ contextText, gender, species, pheromoneLabels, notes
     if (connection) briefLines.push(`- Connection to this bot/story — this MUST be reflected in the background options: ${connection}`);
     if (briefLines.length) {
         parts.push(`# AUTHOR'S BRIEF (MANDATORY)\n${briefLines.join('\n')}`);
+    }
+
+    if (avoidNames && avoidNames.length) {
+        parts.push(
+            "# NAMES ALREADY IN USE (MANDATORY)\n"
+            + 'Do not use any of these names for the new character — they already belong to '
+            + `existing personas: ${avoidNames.join(', ')}.`,
+        );
     }
 
     if (notes && notes.trim()) {
@@ -213,6 +232,13 @@ export async function openAlter() {
         </div>
 
         <div class="pw-question">
+            <label class="pw-toggle">
+                <input type="checkbox" class="pw-alter-avoid-names" ${draft.avoidNames !== false ? 'checked' : ''}>
+                <span>Избегать уже занятых имён (${getAllPersonaNames().length} персон в библиотеке)</span>
+            </label>
+        </div>
+
+        <div class="pw-question">
             <div class="pw-question-label">Связь с ботом/сюжетом</div>
             <div class="pw-question-hint">Уйдёт в бэкграунд, отдельным блоком в выводе не станет.</div>
             <textarea class="text_pole pw-alter-connection" rows="2" placeholder="Например: детство вместе, случайная встреча, похищен...">${escapeHtml(draft.connection)}</textarea>
@@ -261,6 +287,7 @@ export async function openAlter() {
             invention: $(root).find('.pw-alter-seg[data-name="invention"][aria-pressed="true"]').data('value') || 'balanced',
             profileId: $(root).find('.pw-model-select').val() || '',
             loreNames: $(root).find('.pw-lore-checkbox:checked').map(function () { return $(this).val(); }).get(),
+            avoidNames: $(root).find('.pw-alter-avoid-names').prop('checked'),
         });
     };
 
@@ -278,8 +305,8 @@ export async function openAlter() {
         persistAlterDraft();
     });
 
-    // Любое изменение текстовых полей/модели/лорбуков — тоже сохраняем.
-    $(root).on('input change', '.pw-alter-species, .pw-alter-connection, .pw-alter-notes, .pw-model-select, .pw-lore-checkbox', persistAlterDraft);
+    // Любое изменение текстовых полей/модели/лорбуков/тумблера имён — тоже сохраняем.
+    $(root).on('input change', '.pw-alter-species, .pw-alter-connection, .pw-alter-notes, .pw-model-select, .pw-lore-checkbox, .pw-alter-avoid-names', persistAlterDraft);
 
     let activeAbort = null;
     let activeUsesProfile = false;
@@ -328,6 +355,7 @@ export async function openAlter() {
                 notes,
                 connection,
                 invention,
+                avoidNames: $(root).find('.pw-alter-avoid-names').prop('checked') ? getAllPersonaNames() : [],
             });
 
             const text = await runGeneration({
